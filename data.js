@@ -1,8 +1,9 @@
 /*
-1. Get svg to draw a scatterplot of quiz grade on day 1 for each penguin
-2. Add button for day 2 quiz grades
-3. Make function to add buttons for other quiz grades, and ensure they remove previous dots; 
+For each penguin, draw a line showing the quiz scores of that penguin
+With so many penguins a legend and different colors would be meaningless, don't draw them.
+For something extra, add a hover effect for the lines(mouseover and mouseout are the names of the events). Have the selected line change color and display a picture of the penguin that that line represents.
 */
+
 var appPromise = d3.json("penguins/classData.json");
 appPromise.then(
     function(penguins)
@@ -10,6 +11,44 @@ appPromise.then(
           //functions to call
         }) 
 //brings my data in, and calls the function to draw the table.
+
+var screen={width:400, height:500}
+var margins={top:10,right:50,bottom:50,left:50}
+
+var setup=function(penguins)
+{
+    d3.select("svg")
+    .attr('width',screen.width)
+    .attr('height'),screen.height)
+    .append('g')
+    .attr('id','graph')
+    .attr('transform','translate('+margins.left+','+margins.top+')');
+    
+var xScale=d3.scaleLinear()
+    .domain([0,d3.max(penguins,function(penguin)
+    {
+        return d[0]
+    })])
+        .range([0,width])
+
+var yScale=d3.scaleLinear()
+    .domain([0,100])
+    .range([height,0])
+
+//var cScale=d3.scaleOrdinal(d3.schemePastel1)
+
+var xAxis=d3.axisBottom(xScale)
+var yAxis=d3.axisLeft(yscale)
+d3.select('svg')
+    .append('g')
+    .classed('axis',true);
+
+/*
+1. Get svg to draw a scatterplot of quiz grade on day 1 for each penguin
+2. Add button for day 2 quiz grades
+3. Make function to add buttons for other quiz grades, and ensure they remove previous dots; 
+
+
 
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
@@ -26,7 +65,6 @@ var yValue = function(penguin) { return penguin.quiz[0].grade;} // data -> value
     yAxis = d3.svg.axis().scale(yScale).orient("left");
 
 
-/*
 //This function draws my table
 var makeTable = function(penguins)
 {
